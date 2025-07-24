@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="581pt" height="420pt" viewBox="0.00 0.00 581.02 420.20">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 416.2)">
+<title>CareerAI</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-416.2 577.02,-416.2 577.02,4 -4,4"/>
+<!-- Пользователь -->
+<g id="node1" class="node">
+<title>Пользователь</title>
+<polygon fill="white" stroke="black" points="288.66,-412.2 179.31,-412.2 179.31,-376.2 288.66,-376.2 288.66,-412.2"/>
+<text text-anchor="middle" x="233.98" y="-390" font-family="Arial" font-size="14.00">Пользователь</text>
+</g>
+<!-- Анкета -->
+<g id="node2" class="node">
+<title>Анкета</title>
+<polygon fill="white" stroke="black" points="232.32,-339.2 169.65,-339.2 169.65,-303.2 232.32,-303.2 232.32,-339.2"/>
+<text text-anchor="middle" x="200.98" y="-317" font-family="Arial" font-size="14.00">Анкета</text>
+</g>
+<!-- Пользователь&#45;&gt;Анкета -->
+<g id="edge1" class="edge">
+<title>Пользователь-&gt;Анкета</title>
+<path fill="none" stroke="black" d="M226,-376.01C222.31,-368.08 217.84,-358.46 213.7,-349.56"/>
+<polygon fill="black" stroke="black" points="216.93,-348.19 209.54,-340.6 210.58,-351.14 216.93,-348.19"/>
+</g>
+<!-- Сервер -->
+<g id="node3" class="node">
+<title>Сервер</title>
+<polygon fill="white" stroke="black" points="265.32,-266.2 202.65,-266.2 202.65,-230.2 265.32,-230.2 265.32,-266.2"/>
+<text text-anchor="middle" x="233.98" y="-244" font-family="Arial" font-size="14.00">Сервер</text>
+</g>
+<!-- Анкета&#45;&gt;Сервер -->
+<g id="edge2" class="edge">
+<title>Анкета-&gt;Сервер</title>
+<path fill="none" stroke="black" d="M208.97,-303.01C212.66,-295.08 217.13,-285.46 221.27,-276.56"/>
+<polygon fill="black" stroke="black" points="224.39,-278.14 225.43,-267.6 218.04,-275.19 224.39,-278.14"/>
+</g>
+<!-- Сервер&#45;&gt;Пользователь -->
+<g id="edge11" class="edge">
+<title>Сервер-&gt;Пользователь</title>
+<path fill="none" stroke="black" d="M236.83,-266.65C238.4,-277.2 240.19,-290.94 240.98,-303.2 242.01,-319.17 242.01,-323.23 240.98,-339.2 240.45,-347.44 239.47,-356.34 238.4,-364.5"/>
+<polygon fill="black" stroke="black" points="234.96,-363.86 237.04,-374.25 241.89,-364.83 234.96,-363.86"/>
+<text text-anchor="middle" x="296.01" y="-317" font-family="Times,serif" font-size="14.00">Вывод результата</text>
+</g>
+<!-- БД 1\n(Анкеты + Профессии) -->
+<g id="node4" class="node">
+<title>БД 1\n(Анкеты + Профессии)</title>
+<polygon fill="white" stroke="black" points="157.97,-193.2 0,-193.2 0,-151.6 157.97,-151.6 157.97,-193.2"/>
+<text text-anchor="middle" x="78.98" y="-176.6" font-family="Arial" font-size="14.00">БД 1</text>
+<text text-anchor="middle" x="78.98" y="-159.8" font-family="Arial" font-size="14.00">(Анкеты + Профессии)</text>
+</g>
+<!-- Сервер&#45;&gt;БД 1\n(Анкеты + Профессии) -->
+<g id="edge3" class="edge">
+<title>Сервер-&gt;БД 1\n(Анкеты + Профессии)</title>
+<path fill="none" stroke="black" d="M202.47,-234.68C180.36,-224.86 150.56,-210.86 125.73,-198.72"/>
+<polygon fill="black" stroke="black" points="127.3,-195.6 116.78,-194.32 124.21,-201.88 127.3,-195.6"/>
+</g>
+<!-- Сервер&#45;&gt;БД 1\n(Анкеты + Профессии) -->
+<g id="edge10" class="edge">
+<title>Сервер-&gt;БД 1\n(Анкеты + Профессии)</title>
+<path fill="none" stroke="black" d="M203.09,-229.71C184.43,-220.36 160.12,-208.7 137.93,-198.41"/>
+<polygon fill="black" stroke="black" points="139.51,-195.28 128.96,-194.27 136.58,-201.64 139.51,-195.28"/>
+</g>
+<!-- Модель 1: MBTI -->
+<g id="node5" class="node">
+<title>Модель 1: MBTI</title>
+<polygon fill="white" stroke="black" points="291.77,-190.4 176.2,-190.4 176.2,-154.4 291.77,-154.4 291.77,-190.4"/>
+<text text-anchor="middle" x="233.98" y="-168.2" font-family="Arial" font-size="14.00">Модель 1: MBTI</text>
+</g>
+<!-- Сервер&#45;&gt;Модель 1: MBTI -->
+<g id="edge4" class="edge">
+<title>Сервер-&gt;Модель 1: MBTI</title>
+<path fill="none" stroke="black" d="M233.98,-229.71C233.98,-221.44 233.98,-211.35 233.98,-202"/>
+<polygon fill="black" stroke="black" points="237.48,-202.28 233.98,-192.28 230.48,-202.28 237.48,-202.28"/>
+</g>
+<!-- Модель 2: Профориентация -->
+<g id="node6" class="node">
+<title>Модель 2: Профориентация</title>
+<polygon fill="white" stroke="black" points="423.5,-114.6 232.46,-114.6 232.46,-78.6 423.5,-78.6 423.5,-114.6"/>
+<text text-anchor="middle" x="327.98" y="-92.4" font-family="Arial" font-size="14.00">Модель 2: Профориентация</text>
+</g>
+<!-- Сервер&#45;&gt;Модель 2: Профориентация -->
+<g id="edge6" class="edge">
+<title>Сервер-&gt;Модель 2: Профориентация</title>
+<path fill="none" stroke="black" d="M262.93,-229.86C276.27,-220.53 291.27,-207.91 300.98,-193.2 314.35,-172.97 321.18,-146.12 324.62,-126.03"/>
+<polygon fill="black" stroke="black" points="328.06,-126.7 326.09,-116.29 321.14,-125.66 328.06,-126.7"/>
+<text text-anchor="middle" x="364.75" y="-168.2" font-family="Times,serif" font-size="14.00">анкета + MBTI</text>
+</g>
+<!-- Модель 1: MBTI&#45;&gt;Модель 2: Профориентация -->
+<g id="edge5" class="edge">
+<title>Модель 1: MBTI-&gt;Модель 2: Профориентация</title>
+<path fill="none" stroke="black" d="M256.26,-153.91C268.44,-144.35 283.7,-132.36 297.02,-121.91"/>
+<polygon fill="black" stroke="black" points="298.97,-124.83 304.68,-115.9 294.65,-119.32 298.97,-124.83"/>
+</g>
+<!-- Модель 2: Профориентация&#45;&gt;Сервер -->
+<g id="edge9" class="edge">
+<title>Модель 2: Профориентация-&gt;Сервер</title>
+<path fill="none" stroke="black" d="M374.07,-115.02C389.95,-123.5 406,-135.44 414.98,-151.6 423.97,-167.76 426.03,-178.37 414.98,-193.2 398.47,-215.37 325.2,-231.76 277.1,-240.37"/>
+<polygon fill="black" stroke="black" points="276.5,-236.92 267.25,-242.08 277.7,-243.81 276.5,-236.92"/>
+<text text-anchor="middle" x="497.77" y="-168.2" font-family="Times,serif" font-size="14.00">5 профессий с описанием</text>
+</g>
+<!-- БД 2\n(Описание профессий) -->
+<g id="node7" class="node">
+<title>БД 2\n(Описание профессий)</title>
+<polygon fill="white" stroke="black" points="408.72,-41.6 247.25,-41.6 247.25,0 408.72,0 408.72,-41.6"/>
+<text text-anchor="middle" x="327.98" y="-25" font-family="Arial" font-size="14.00">БД 2</text>
+<text text-anchor="middle" x="327.98" y="-8.2" font-family="Arial" font-size="14.00">(Описание профессий)</text>
+</g>
+<!-- Модель 2: Профориентация&#45;&gt;БД 2\n(Описание профессий) -->
+<g id="edge7" class="edge">
+<title>Модель 2: Профориентация-&gt;БД 2\n(Описание профессий)</title>
+<path fill="none" stroke="black" d="M322.14,-78.11C321.38,-70.75 321.1,-61.95 321.29,-53.52"/>
+<polygon fill="black" stroke="black" points="324.79,-53.72 321.81,-43.55 317.8,-53.36 324.79,-53.72"/>
+</g>
+<!-- БД 2\n(Описание профессий)&#45;&gt;Модель 2: Профориентация -->
+<g id="edge8" class="edge">
+<title>БД 2\n(Описание профессий)-&gt;Модель 2: Профориентация</title>
+<path fill="none" stroke="black" d="M334.08,-42.04C334.72,-49.63 334.89,-58.42 334.59,-66.65"/>
+<polygon fill="black" stroke="black" points="331.1,-66.39 333.93,-76.6 338.09,-66.86 331.1,-66.39"/>
+</g>
+</g>
+</svg>

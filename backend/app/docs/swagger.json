@@ -1,0 +1,1196 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "REST API for external devices to access the internal Smartify system",
+        "title": "Smartify Backend API",
+        "contact": {
+            "name": "Smartify Working Mail",
+            "email": "smartifyprojectapp@gmail.com"
+        },
+        "version": "1.1"
+    },
+    "host": "213.226.112.206:22025",
+    "basePath": "/api",
+    "paths": {
+        "/add_tutor": {
+            "post": {
+                "description": "Available only to authenticated users with the tutor role. Updates or creates a tutor record.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tutor"
+                ],
+                "summary": "Adding/updating tutor information",
+                "parameters": [
+                    {
+                        "description": "Tutor data to be updated",
+                        "name": "tutor_data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/database.Tutor"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful data update",
+                        "schema": {
+                            "$ref": "#/definitions/api.Tutor_succes"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data or JSON",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "401": {
+                        "description": "User not authenticated",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "403": {
+                        "description": "The user is not a tutor",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error (database, etc.)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/checkTokens": {
+            "post": {
+                "description": "Checks the expiration date of access and refresh tokens",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Checking token validity",
+                "parameters": [
+                    {
+                        "description": "A couple of tokens to check out",
+                        "name": "tokens",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Tokens_answer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "The tokens are valid",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "401": {
+                        "description": "Tokens are invalid or expired",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/commit_code_reset_password": {
+            "post": {
+                "description": "Validates the password reset code sent to email",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Verifying the confirmation code",
+                "parameters": [
+                    {
+                        "description": "Email and confirmation code",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Code_verification"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Code confirmed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid code or user not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/forgot_password": {
+            "post": {
+                "description": "Sends a confirmation code to the user's email for password recovery",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Password reset request",
+                "parameters": [
+                    {
+                        "description": "User Email",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Email_struct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirmation code sent",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request or user not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/get_teachers": {
+            "get": {
+                "description": "Retrieves a list of all teachers from the database",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "teachers"
+                ],
+                "summary": "Get all teachers",
+                "responses": {
+                    "200": {
+                        "description": "List of teachers",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/database.Teacher"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/get_tutor": {
+            "get": {
+                "description": "Returns complete information about the current authenticated tutor",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "tutor"
+                ],
+                "summary": "Getting information about the tutor",
+                "responses": {
+                    "200": {
+                        "description": "Tutor data",
+                        "schema": {
+                            "$ref": "#/definitions/database.Tutor"
+                        }
+                    },
+                    "401": {
+                        "description": "User not authenticated",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "403": {
+                        "description": "The user is not a tutor",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error (database, etc.)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/gettrackers": {
+            "post": {
+                "description": "Returns a list of trackers for an authenticated user. Valid access token is required.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trackers"
+                ],
+                "summary": "Retrieving user trackers",
+                "parameters": [
+                    {
+                        "description": "Request with access token",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Get_trackers_request"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with trackers",
+                        "schema": {
+                            "$ref": "#/definitions/api.Trackers"
+                        }
+                    },
+                    "304": {
+                        "description": "The data has not been modified (Not Modified)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access (invalid token)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/hello": {
+            "get": {
+                "description": "Returns the status “ok” if the server is running",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "utils"
+                ],
+                "summary": "Checking server availability",
+                "responses": {
+                    "200": {
+                        "description": "The server is available",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "description": "Validates user credentials and returns a pair of JWT tokens (access and refresh)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "User Authentication",
+                "parameters": [
+                    {
+                        "description": "User Email and Password",
+                        "name": "credentials",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.User_email_password"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful authentication, returns tokens",
+                        "schema": {
+                            "$ref": "#/definitions/api.Tokens_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid credentials or invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error (token generation, database problems)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "description": "Deactivates the refresh token, terminating the user session",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Logout",
+                "parameters": [
+                    {
+                        "description": "Refresh token for deactivation",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Refresh_token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful exit",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/questionnaire": {
+            "post": {
+                "description": "Creates a new user profile and returns ML-based occupation recommendations. Authentication required (JWT token in Authorization header)",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "questionnaire"
+                ],
+                "summary": "Creating a new questionnaire",
+                "parameters": [
+                    {
+                        "description": "Questionnaire data",
+                        "name": "questionnaire",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/database.Questionnaire"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response with recommendations of occupations",
+                        "schema": {
+                            "$ref": "#/definitions/api.ProfessionPredResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid questionnaire data",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "User not authenticated",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error (database, ML model, etc.)",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/refresh_token": {
+            "post": {
+                "description": "Returns a new access/refresh token pair using a valid refresh token. The old refresh token becomes invalid.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "JWT Token Update",
+                "parameters": [
+                    {
+                        "description": "Refresh token to update",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Refresh_token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "A new pair of tokens",
+                        "schema": {
+                            "$ref": "#/definitions/api.Tokens_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "401": {
+                        "description": "Invalid or expired refresh token",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error (token generation, database)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/registration_codevalidation": {
+            "post": {
+                "description": "Validates the code sent to the user's email address",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "registration"
+                ],
+                "summary": "Verifying the confirmation code",
+                "parameters": [
+                    {
+                        "description": "Email and confirmation code",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Code_verification"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Code confirmed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid code or user not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/registration_emailvalidation": {
+            "post": {
+                "description": "Checks the validity of the email and sends a confirmation code. Email must not be already registered.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "registration"
+                ],
+                "summary": "Email validation during registration",
+                "parameters": [
+                    {
+                        "description": "User Email",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Email_struct"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Confirmation code sent",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid email or request",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "409": {
+                        "description": "The user already exists",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error (code generation, sending email)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/registration_password": {
+            "post": {
+                "description": "Saves the user password and issues access tokens",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "registration"
+                ],
+                "summary": "Finalizing registration",
+                "parameters": [
+                    {
+                        "description": "User Email and Password",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.User_email_password"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access tokens",
+                        "schema": {
+                            "$ref": "#/definitions/api.Tokens_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid data or user not found",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "500": {
+                        "description": "Server error (database, token generation)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/reset_password": {
+            "post": {
+                "description": "Sets a new password after successful verification of the confirmation code",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Setting a new password",
+                "parameters": [
+                    {
+                        "description": "Email and new password",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Update_password"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Password successfully changed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid password request or update error",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/savetrackers": {
+            "post": {
+                "description": "Saves the user's trackers on the server for synchronization between devices. Requires valid access token and correct timestamp.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "trackers"
+                ],
+                "summary": "Saving user trackers",
+                "parameters": [
+                    {
+                        "description": "Data to be saved (token, trackers and timestamp)",
+                        "name": "request",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/api.Tracker_save"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Trackers successfully saved",
+                        "schema": {
+                            "$ref": "#/definitions/api.Success_answer"
+                        }
+                    },
+                    "304": {
+                        "description": "The data has not been modified (Not Modified)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid request (incorrect data or time format)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized access (invalid token)",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    },
+                    "405": {
+                        "description": "Method not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/api.Error_answer"
+                        }
+                    }
+                }
+            }
+        },
+        "/update_university_json": {
+            "get": {
+                "description": "Returns a universities.json file with all universities from the database in a structured format for downloading",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "universities"
+                ],
+                "summary": "Getting the list of universities in JSON format",
+                "responses": {
+                    "200": {
+                        "description": "JSON file with university data",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "additionalProperties": true
+                            }
+                        },
+                        "headers": {
+                            "Content-Disposition": {
+                                "type": "string",
+                                "description": "attachment; filename=universities.json"
+                            },
+                            "Content-Type": {
+                                "type": "string",
+                                "description": "application/json"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Плохой запрос - разрешен только метод GET",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error - Failed to generate or send file",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "api.Code_verification": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Email_struct": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Error_answer": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "HTTP status code",
+                    "type": "integer"
+                },
+                "error": {
+                    "description": "Error message",
+                    "type": "string"
+                }
+            }
+        },
+        "api.Get_trackers_request": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "description": "Authentication token (Access Token)",
+                    "type": "string"
+                }
+            }
+        },
+        "api.ProfessionPredResponse": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "negatives": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "positives": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "score": {
+                    "type": "number"
+                },
+                "subsphere": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Refresh_token": {
+            "type": "object",
+            "properties": {
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Success_answer": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "HTTP status code",
+                    "type": "integer"
+                },
+                "status": {
+                    "description": "Status message",
+                    "type": "string"
+                }
+            }
+        },
+        "api.Tokens_answer": {
+            "type": "object",
+            "properties": {
+                "access_token": {
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Tracker_save": {
+            "type": "object",
+            "properties": {
+                "timestamp": {
+                    "type": "string"
+                },
+                "token": {
+                    "type": "string"
+                },
+                "trackers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[tracker1",
+                        " tracker2]"
+                    ]
+                }
+            }
+        },
+        "api.Trackers": {
+            "type": "object",
+            "properties": {
+                "trackers": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    },
+                    "example": [
+                        "[tracker1",
+                        " tracker2]"
+                    ]
+                }
+            }
+        },
+        "api.Tutor_succes": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.Update_password": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "api.User_email_password": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.Questionnaire": {
+            "type": "object",
+            "properties": {
+                "avg_grade": {
+                    "type": "string"
+                },
+                "class": {
+                    "type": "string"
+                },
+                "favorite_subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "hard_subjects": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "interests": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "mbti_scores": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "region": {
+                    "type": "string"
+                },
+                "subject_scores": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "integer"
+                    }
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "user_id": {
+                    "type": "integer"
+                },
+                "values": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "work_preferences": {
+                    "$ref": "#/definitions/database.WorkPreferences"
+                }
+            }
+        },
+        "database.Teacher": {
+            "type": "object",
+            "properties": {
+                "avatarurl": {
+                    "type": "string"
+                },
+                "city": {
+                    "type": "string"
+                },
+                "level": {
+                    "type": "string"
+                },
+                "link": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "rating": {
+                    "type": "number"
+                },
+                "subject": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "database.Tutor": {
+            "type": "object",
+            "properties": {
+                "cource": {
+                    "type": "integer"
+                },
+                "interests": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "timestamp": {
+                    "type": "string"
+                },
+                "university": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "user_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "database.WorkPreferences": {
+            "type": "object",
+            "properties": {
+                "exclude": {
+                    "type": "string"
+                },
+                "place": {
+                    "type": "string"
+                },
+                "role": {
+                    "type": "string"
+                },
+                "style": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}

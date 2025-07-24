@@ -1,0 +1,793 @@
+basePath: /api
+definitions:
+  api.Code_verification:
+    properties:
+      code:
+        type: string
+      email:
+        type: string
+    type: object
+  api.Email_struct:
+    properties:
+      email:
+        type: string
+    type: object
+  api.Error_answer:
+    properties:
+      code:
+        description: HTTP status code
+        type: integer
+      error:
+        description: Error message
+        type: string
+    type: object
+  api.Get_trackers_request:
+    properties:
+      token:
+        description: Authentication token (Access Token)
+        type: string
+    type: object
+  api.ProfessionPredResponse:
+    properties:
+      description:
+        type: string
+      name:
+        type: string
+      negatives:
+        items:
+          type: string
+        type: array
+      positives:
+        items:
+          type: string
+        type: array
+      score:
+        type: number
+      subsphere:
+        type: string
+    type: object
+  api.Refresh_token:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  api.Success_answer:
+    properties:
+      code:
+        description: HTTP status code
+        type: integer
+      status:
+        description: Status message
+        type: string
+    type: object
+  api.Tokens_answer:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  api.Tracker_save:
+    properties:
+      timestamp:
+        type: string
+      token:
+        type: string
+      trackers:
+        example:
+        - '[tracker1'
+        - ' tracker2]'
+        items:
+          type: string
+        type: array
+    type: object
+  api.Trackers:
+    properties:
+      trackers:
+        example:
+        - '[tracker1'
+        - ' tracker2]'
+        items:
+          type: string
+        type: array
+    type: object
+  api.Tutor_succes:
+    properties:
+      code:
+        type: integer
+      status:
+        type: string
+    type: object
+  api.Update_password:
+    properties:
+      email:
+        type: string
+      newPassword:
+        type: string
+    type: object
+  api.User_email_password:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  database.Questionnaire:
+    properties:
+      avg_grade:
+        type: string
+      class:
+        type: string
+      favorite_subjects:
+        items:
+          type: string
+        type: array
+      hard_subjects:
+        items:
+          type: string
+        type: array
+      interests:
+        items:
+          type: string
+        type: array
+      mbti_scores:
+        additionalProperties:
+          type: integer
+        type: object
+      region:
+        type: string
+      subject_scores:
+        additionalProperties:
+          type: integer
+        type: object
+      timestamp:
+        type: string
+      user_id:
+        type: integer
+      values:
+        items:
+          type: string
+        type: array
+      work_preferences:
+        $ref: '#/definitions/database.WorkPreferences'
+    type: object
+  database.Teacher:
+    properties:
+      avatarurl:
+        type: string
+      city:
+        type: string
+      level:
+        type: string
+      link:
+        type: string
+      name:
+        type: string
+      price:
+        type: integer
+      rating:
+        type: number
+      subject:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  database.Tutor:
+    properties:
+      cource:
+        type: integer
+      interests:
+        items:
+          type: string
+        type: array
+      timestamp:
+        type: string
+      university:
+        items:
+          type: string
+        type: array
+      user_id:
+        type: integer
+    type: object
+  database.WorkPreferences:
+    properties:
+      exclude:
+        type: string
+      place:
+        type: string
+      role:
+        type: string
+      style:
+        type: string
+    type: object
+host: 213.226.112.206:22025
+info:
+  contact:
+    email: smartifyprojectapp@gmail.com
+    name: Smartify Working Mail
+  description: REST API for external devices to access the internal Smartify system
+  title: Smartify Backend API
+  version: "1.1"
+paths:
+  /add_tutor:
+    post:
+      consumes:
+      - application/json
+      description: Available only to authenticated users with the tutor role. Updates
+        or creates a tutor record.
+      parameters:
+      - description: Tutor data to be updated
+        in: body
+        name: tutor_data
+        required: true
+        schema:
+          $ref: '#/definitions/database.Tutor'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful data update
+          schema:
+            $ref: '#/definitions/api.Tutor_succes'
+        "400":
+          description: Invalid data or JSON
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "403":
+          description: The user is not a tutor
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "500":
+          description: Server error (database, etc.)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Adding/updating tutor information
+      tags:
+      - tutor
+  /checkTokens:
+    post:
+      consumes:
+      - application/json
+      description: Checks the expiration date of access and refresh tokens
+      parameters:
+      - description: A couple of tokens to check out
+        in: body
+        name: tokens
+        required: true
+        schema:
+          $ref: '#/definitions/api.Tokens_answer'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: The tokens are valid
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Tokens are invalid or expired
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Checking token validity
+      tags:
+      - auth
+  /commit_code_reset_password:
+    post:
+      consumes:
+      - application/json
+      description: Validates the password reset code sent to email
+      parameters:
+      - description: Email and confirmation code
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Code_verification'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Code confirmed
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Invalid code or user not found
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Verifying the confirmation code
+      tags:
+      - auth
+  /forgot_password:
+    post:
+      consumes:
+      - application/json
+      description: Sends a confirmation code to the user's email for password recovery
+      parameters:
+      - description: User Email
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Email_struct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirmation code sent
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Invalid request or user not found
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Password reset request
+      tags:
+      - auth
+  /get_teachers:
+    get:
+      description: Retrieves a list of all teachers from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: List of teachers
+          schema:
+            items:
+              $ref: '#/definitions/database.Teacher'
+            type: array
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get all teachers
+      tags:
+      - teachers
+  /get_tutor:
+    get:
+      description: Returns complete information about the current authenticated tutor
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Tutor data
+          schema:
+            $ref: '#/definitions/database.Tutor'
+        "401":
+          description: User not authenticated
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "403":
+          description: The user is not a tutor
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "500":
+          description: Server error (database, etc.)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Getting information about the tutor
+      tags:
+      - tutor
+  /gettrackers:
+    post:
+      consumes:
+      - application/json
+      description: Returns a list of trackers for an authenticated user. Valid access
+        token is required.
+      parameters:
+      - description: Request with access token
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Get_trackers_request'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with trackers
+          schema:
+            $ref: '#/definitions/api.Trackers'
+        "304":
+          description: The data has not been modified (Not Modified)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Unauthorized access (invalid token)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Retrieving user trackers
+      tags:
+      - trackers
+  /hello:
+    get:
+      description: Returns the status “ok” if the server is running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: The server is available
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Checking server availability
+      tags:
+      - utils
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Validates user credentials and returns a pair of JWT tokens (access
+        and refresh)
+      parameters:
+      - description: User Email and Password
+        in: body
+        name: credentials
+        required: true
+        schema:
+          $ref: '#/definitions/api.User_email_password'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful authentication, returns tokens
+          schema:
+            $ref: '#/definitions/api.Tokens_answer'
+        "400":
+          description: Invalid credentials or invalid request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "500":
+          description: Server error (token generation, database problems)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: User Authentication
+      tags:
+      - auth
+  /logout:
+    post:
+      consumes:
+      - application/json
+      description: Deactivates the refresh token, terminating the user session
+      parameters:
+      - description: Refresh token for deactivation
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Refresh_token'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful exit
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Logout
+      tags:
+      - auth
+  /questionnaire:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user profile and returns ML-based occupation recommendations.
+        Authentication required (JWT token in Authorization header)
+      parameters:
+      - description: Questionnaire data
+        in: body
+        name: questionnaire
+        required: true
+        schema:
+          $ref: '#/definitions/database.Questionnaire'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with recommendations of occupations
+          schema:
+            $ref: '#/definitions/api.ProfessionPredResponse'
+        "400":
+          description: Invalid questionnaire data
+          schema:
+            type: string
+        "401":
+          description: User not authenticated
+          schema:
+            type: string
+        "405":
+          description: Method not allowed
+          schema:
+            type: string
+        "500":
+          description: Server error (database, ML model, etc.)
+          schema:
+            type: string
+      summary: Creating a new questionnaire
+      tags:
+      - questionnaire
+  /refresh_token:
+    post:
+      consumes:
+      - application/json
+      description: Returns a new access/refresh token pair using a valid refresh token.
+        The old refresh token becomes invalid.
+      parameters:
+      - description: Refresh token to update
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Refresh_token'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: A new pair of tokens
+          schema:
+            $ref: '#/definitions/api.Tokens_answer'
+        "400":
+          description: Invalid request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Invalid or expired refresh token
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "500":
+          description: Server error (token generation, database)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: JWT Token Update
+      tags:
+      - auth
+  /registration_codevalidation:
+    post:
+      consumes:
+      - application/json
+      description: Validates the code sent to the user's email address
+      parameters:
+      - description: Email and confirmation code
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Code_verification'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Code confirmed
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Invalid code or user not found
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Verifying the confirmation code
+      tags:
+      - registration
+  /registration_emailvalidation:
+    post:
+      consumes:
+      - application/json
+      description: Checks the validity of the email and sends a confirmation code.
+        Email must not be already registered.
+      parameters:
+      - description: User Email
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Email_struct'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Confirmation code sent
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Invalid email or request
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "409":
+          description: The user already exists
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "500":
+          description: Server error (code generation, sending email)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Email validation during registration
+      tags:
+      - registration
+  /registration_password:
+    post:
+      consumes:
+      - application/json
+      description: Saves the user password and issues access tokens
+      parameters:
+      - description: User Email and Password
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.User_email_password'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Access tokens
+          schema:
+            $ref: '#/definitions/api.Tokens_answer'
+        "400":
+          description: Invalid data or user not found
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "500":
+          description: Server error (database, token generation)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Finalizing registration
+      tags:
+      - registration
+  /reset_password:
+    post:
+      consumes:
+      - application/json
+      description: Sets a new password after successful verification of the confirmation
+        code
+      parameters:
+      - description: Email and new password
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Update_password'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Password successfully changed
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "400":
+          description: Invalid password request or update error
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Setting a new password
+      tags:
+      - auth
+  /savetrackers:
+    post:
+      consumes:
+      - application/json
+      description: Saves the user's trackers on the server for synchronization between
+        devices. Requires valid access token and correct timestamp.
+      parameters:
+      - description: Data to be saved (token, trackers and timestamp)
+        in: body
+        name: request
+        required: true
+        schema:
+          $ref: '#/definitions/api.Tracker_save'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Trackers successfully saved
+          schema:
+            $ref: '#/definitions/api.Success_answer'
+        "304":
+          description: The data has not been modified (Not Modified)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "400":
+          description: Invalid request (incorrect data or time format)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "401":
+          description: Unauthorized access (invalid token)
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+        "405":
+          description: Method not allowed
+          schema:
+            $ref: '#/definitions/api.Error_answer'
+      summary: Saving user trackers
+      tags:
+      - trackers
+  /update_university_json:
+    get:
+      description: Returns a universities.json file with all universities from the
+        database in a structured format for downloading
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: JSON file with university data
+          headers:
+            Content-Disposition:
+              description: attachment; filename=universities.json
+              type: string
+            Content-Type:
+              description: application/json
+              type: string
+          schema:
+            items:
+              additionalProperties: true
+              type: object
+            type: array
+        "400":
+          description: Плохой запрос - разрешен только метод GET
+          schema:
+            type: string
+        "500":
+          description: Internal server error - Failed to generate or send file
+          schema:
+            type: string
+      summary: Getting the list of universities in JSON format
+      tags:
+      - universities
+swagger: "2.0"
